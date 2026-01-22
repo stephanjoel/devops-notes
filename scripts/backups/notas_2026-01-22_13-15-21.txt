@@ -1,4 +1,3 @@
  
 hola linux
 aprendiendo git paso a paso 
-dia 4: automatizacion con git
