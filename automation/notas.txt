@@ -1,0 +1,2 @@
+./pipeline.sh "actualizo notas"
+
