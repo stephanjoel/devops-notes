@@ -1,2 +1,2 @@
-./pipeline.sh "actualizo notas"
+./pipeline.sh "actualizo notas correctamente"
 
