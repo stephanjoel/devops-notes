@@ -1,0 +1,23 @@
+name: DevOps CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Dar permisos a scripts
+        run: chmod +x automation/*.sh
+
+      - name: Ejecutar pipeline
+        run: |
+          cd automation
+          ./pipeline.sh "CI automático desde GitHub Actions"
+
