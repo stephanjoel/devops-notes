@@ -1,0 +1,26 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  docker-build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t devops-app:ci ./docker
+
+      - name: Run container (dev)
+        run: |
+          docker run --rm devops-app:ci
+
+      - name: Run container (prod)
+        run: |
+          docker run --rm -e MODO=prod devops-app:ci
+
