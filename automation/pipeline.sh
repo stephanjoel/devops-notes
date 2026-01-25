@@ -1,32 +1,31 @@
 #!/bin/bash
 set -e
 
-MENSAJE="$1"
+# Ir a la raíz del repo, aunque ejecutes el script desde otro lado
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$REPO_ROOT"
 
-if [ -z "$MENSAJE" ]; then
-  echo "❌ Tenés que pasar un mensaje de commit"
-  exit 1
-fi
+MSG="${1:-chore: cambios automaticos}"
 
-echo "🔎 Verificando cambios..."
-CHANGES=$(git status --porcelain)
+echo "📌 Repo root: $REPO_ROOT"
+echo "🧾 Mensaje: $MSG"
 
-if [ -z "$CHANGES" ]; then
-  echo "⚠️ No hay cambios para commitear. Pipeline detenido."
+echo "🔍 Verificando cambios..."
+git status --porcelain
+
+if [ -z "$(git status --porcelain)" ]; then
+  echo "✅ No hay cambios. No se commitea ni pushea."
   exit 0
 fi
 
-echo "📦 Commit automático"
-./autocommit.sh "$MENSAJE"
+echo "➕ Agregando cambios..."
+git add -A
 
-COMMITS=$(git log origin/main..HEAD --oneline | wc -l)
+echo "🧱 Commit..."
+git commit -m "$MSG"
 
-if [ "$COMMITS" -eq 0 ]; then
-  echo "⚠️ No hubo commits nuevos. No se hace push."
-  exit 0
-fi
+echo "🚀 Push..."
+git push
 
-echo "🚀 Push automático"
-./autopush.sh
+echo "🎉 Listo. CI debería ejecutarse en GitHub Actions."
 
-echo "✅ Pipeline finalizado con éxito"

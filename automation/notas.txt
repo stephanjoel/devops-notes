@@ -1,2 +1,4 @@
-./pipeline.sh "actualizo notas correctamente"
+git add automation/notas.txt
+git commit -m "disparo CI para probar workflow"
+git push
 

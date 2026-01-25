@@ -2,3 +2,4 @@
 hola linux
 aprendiendo git paso a paso 
 dia 4: automatizacion con git
+dia 5: probando pipeline pro
