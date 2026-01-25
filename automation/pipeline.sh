@@ -1,28 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-# Ir a la raíz del repo, aunque ejecutes el script desde otro lado
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$REPO_ROOT"
+MSG="${1:-update: cambios}"
 
-MSG="${1:-chore: cambios automaticos}"
-
-echo "📌 Repo root: $REPO_ROOT"
-echo "🧾 Mensaje: $MSG"
-
+echo "📌 Repo root: $(pwd)"
+echo "📝 Mensaje: $MSG"
 echo "🔍 Verificando cambios..."
+
+# 1) Validación: debe existir notas.txt en la raíz del repo
+if [ ! -f "notas.txt" ]; then
+  echo "❌ Error: notas.txt no existe en la raíz del repo."
+  echo "👉 Crealo con: nano notas.txt"
+  exit 1
+fi
+
+# 2) Mostrar estado (info)
 git status --porcelain
 
-if [ -z "$(git status --porcelain)" ]; then
-  echo "✅ No hay cambios. No se commitea ni pushea."
+# 3) Si no hay cambios, cortar
+if git diff --quiet && git diff --cached --quiet; then
+  echo "✅ No hay cambios para commitear."
   exit 0
 fi
 
 echo "➕ Agregando cambios..."
-git add -A
+git add notas.txt automation/*.sh 2>/dev/null || true
 
-echo "🧱 Commit..."
-git commit -m "$MSG"
+echo "✅ Commit..."
+git commit -m "$MSG" || {
+  echo "✅ No hubo nada para commitear."
+  exit 0
+}
 
 echo "🚀 Push..."
 git push
