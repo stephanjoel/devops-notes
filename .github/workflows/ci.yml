@@ -7,6 +7,11 @@ on:
 
 jobs:
   pipeline:
+      - name: Check logs (threshold)
+        run: |
+          chmod +x scripts/check_logs_threshold.sh
+          ./scripts/check_logs_threshold.sh
+
     runs-on: ubuntu-latest
 
     steps:
